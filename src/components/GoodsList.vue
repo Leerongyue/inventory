@@ -4,118 +4,16 @@
     <tr>
       <th>条码</th>
       <th>品名</th>
-      <th>货位</th>
-      <th>数量</th>
+      <th>规格</th>
+      <th>库存</th>
     </tr>
     </thead>
     <tbody>
     <tr>
-      <td>666</td>
-      <td>666</td>
-      <td>666</td>
-      <td>666</td>
-    </tr>
-    <tr>
-      <td>666</td>
-      <td>666</td>
-      <td>666</td>
-      <td>666</td>
-    </tr>
-    <tr>
-      <td>666</td>
-      <td>666</td>
-      <td>666</td>
-      <td>666</td>
-    </tr>
-    <tr>
-      <td>666</td>
-      <td>666</td>
-      <td>666</td>
-      <td>666</td>
-    </tr>
-    <tr>
-      <td>666</td>
-      <td>666</td>
-      <td>666</td>
-      <td>666</td>
-    </tr>
-    <tr>
-      <td>666</td>
-      <td>666</td>
-      <td>666</td>
-      <td>666</td>
-    </tr>
-    <tr>
-      <td>666</td>
-      <td>666</td>
-      <td>666</td>
-      <td>666</td>
-    </tr>
-    <tr>
-      <td>666</td>
-      <td>666</td>
-      <td>666</td>
-      <td>666</td>
-    </tr>
-    <tr>
-      <td>666</td>
-      <td>666</td>
-      <td>666</td>
-      <td>666</td>
-    </tr>
-    <tr>
-      <td>666</td>
-      <td>666</td>
-      <td>666</td>
-      <td>666</td>
-    </tr>
-    <tr>
-      <td>666</td>
-      <td>666</td>
-      <td>666</td>
-      <td>666</td>
-    </tr>
-    <tr>
-      <td>666</td>
-      <td>666</td>
-      <td>666</td>
-      <td>666</td>
-    </tr>
-    <tr>
-      <td>666</td>
-      <td>666</td>
-      <td>666</td>
-      <td>666</td>
-    </tr>
-    <tr>
-      <td>666</td>
-      <td>666</td>
-      <td>666</td>
-      <td>666</td>
-    </tr>
-    <tr>
-      <td>666</td>
-      <td>666</td>
-      <td>666</td>
-      <td>666</td>
-    </tr>
-    <tr>
-      <td>666</td>
-      <td>666</td>
-      <td>666</td>
-      <td>666</td>
-    </tr>
-    <tr>
-      <td>666</td>
-      <td>666</td>
-      <td>666</td>
-      <td>666</td>
-    </tr>
-    <tr>
-      <td>666</td>
-      <td>666</td>
-      <td>666</td>
-      <td>666</td>
+      <td>{{currentGood.barcode}}</td>
+      <td>{{currentGood.goodsname}}</td>
+      <td>{{currentGood.spec}}</td>
+      <td>{{currentGood.stocknum}}</td>
     </tr>
     </tbody>
   </table>
@@ -123,11 +21,12 @@
 
 <script lang="ts">
   import Vue from 'vue';
-  import {Component} from 'vue-property-decorator';
+  import {Component, Prop} from 'vue-property-decorator';
+  import {GoodsDetail} from '@/helper/type';
 
   @Component
   export default class GoodsList extends Vue {
-
+    @Prop(Object) currentGood!: GoodsDetail;
   }
 </script>
 
@@ -144,6 +43,7 @@
     tr {
       td {
         text-align: center;
+        max-width: 30vw;
       }
     }
   }
