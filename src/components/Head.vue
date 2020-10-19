@@ -28,6 +28,10 @@
     align-items: center;
     background: rgb(22, 182, 234);
     padding: 12px 16px;
+    margin-bottom: 8px;
+    position: sticky;
+    top: 0;
+    left: 0;
 
     span {
       font-size: 24px;
