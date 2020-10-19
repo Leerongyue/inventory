@@ -5,17 +5,6 @@
     <Item text="条码" :code="barcode" placeholder="请输入条码" v-model="barcode"/>
     <button class="btn" @click="inventory">确定</button>
     <div class="detail">
-      <!--      <div class="left">-->
-      <!--        <div>货位</div>-->
-      <!--        <div>品名 精密烦得很搜</div>-->
-      <!--        <div>库存 666</div>-->
-      <!--        <div>单位 卷</div>-->
-      <!--      </div>-->
-      <!--      <div class="right">-->
-      <!--        <div>条码 66666666666</div>-->
-      <!--        <div>规格 大立科技覅及</div>-->
-      <!--        <div>价格 666</div>-->
-      <!--      </div>-->
       <div>条码 {{currentGood.barcode}}</div>
       <div>品名 {{currentGood.goodsname}}</div>
       <div>拼音 {{currentGood.py}}</div>
@@ -29,7 +18,7 @@
       <span>品项数 666</span>
       <span>总数量 666</span>
     </div>
-    <GoodsList :current-good="currentGood"/>
+    <GoodsList :goods-list="goodsList"/>
   </div>
 </template>
 
@@ -52,9 +41,12 @@
     account = '';
     barcode = '';
     currentGood = {} as GoodsDetail;
+    goodsList = [] as GoodsDetail[];
 
     created() {
+      this.$store.commit('getGoods');
       this.currentGood = copy<GoodsDetail>({...HomeInitData});
+      this.goodsList = copy(this.$store.state.goodsList);
     }
 
     inventory() {
@@ -63,9 +55,10 @@
         'getResponse',
         {url: '/sssoa/infogoods/query', method: 'POST', value: JSON.stringify(value)})
         .then(res => {
-          console.log(res);
           const data = res.data.resultObj.map((i: Goods) => i.infodata)[0] as GoodsDetail;
           this.currentGood = copy<GoodsDetail>(data);
+          this.goodsList.push(this.currentGood);
+          this.$store.commit('saveGood', {goodsList: this.goodsList});
         });
     }
   }

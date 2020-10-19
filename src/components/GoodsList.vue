@@ -9,11 +9,11 @@
     </tr>
     </thead>
     <tbody>
-    <tr>
-      <td>{{currentGood.barcode}}</td>
-      <td>{{currentGood.goodsname}}</td>
-      <td>{{currentGood.spec}}</td>
-      <td>{{currentGood.stocknum}}</td>
+    <tr v-for="(item,index) in goodsList" :key="index">
+      <td>{{item.barcode}}</td>
+      <td>{{item.goodsname}}</td>
+      <td>{{item.spec}}</td>
+      <td>{{item.stocknum}}</td>
     </tr>
     </tbody>
   </table>
@@ -26,7 +26,7 @@
 
   @Component
   export default class GoodsList extends Vue {
-    @Prop(Object) currentGood!: GoodsDetail;
+    @Prop(Array) goodsList!: GoodsDetail[];
   }
 </script>
 
