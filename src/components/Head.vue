@@ -32,7 +32,7 @@
     position: sticky;
     top: 0;
     left: 0;
-
+    
     span {
       font-size: 24px;
       color: white;
