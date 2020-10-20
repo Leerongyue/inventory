@@ -56,9 +56,13 @@
 
     created() {
       this.$store.commit('getGoods');
+      this.$store.commit('getAmount');
       const goodsArr = copy(this.$store.state.goodsList) as GoodsDetail[];
-      this.currentGood = goodsArr ? copy(goodsArr.pop()) : copy(HomeInitData);
-      // this.currentGood = copy<GoodsDetail>({...HomeInitData});
+      const amountObj = copy(this.$store.state.amount);
+      this.scanAmount = amountObj.scanAmount;
+      this.kindAmount = amountObj.kindAmount;
+      this.totalAmount = amountObj.totalAmount;
+      this.currentGood = goodsArr.length > 0 ? copy(goodsArr.pop()) : copy(HomeInitData);
       this.goodsList = copy<GoodsDetail>(this.$store.state.goodsList);
     }
 
@@ -87,7 +91,6 @@
           this.currentGood = copy<GoodsDetail>(data);
           this.goodsList.push(this.currentGood);
           const barcodeArr = copy(this.goodsList).map((i: GoodsDetail) => i.barcode);
-          console.log(barcodeArr);
           if (this.goodsList.length === 1) {
             this.kindAmount = 1;
           } else {
@@ -96,6 +99,13 @@
             }
           }
           this.$store.commit('saveGood', {goodsList: this.goodsList});
+          this.$store.commit('saveAmount', {
+            amount: {
+              scanAmount: this.scanAmount,
+              kindAmount: this.kindAmount,
+              totalAmount: this.totalAmount
+            }
+          });
         });
     }
   }

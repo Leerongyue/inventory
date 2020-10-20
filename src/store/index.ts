@@ -10,7 +10,8 @@ Vue.use(Vuex);
 
 export default new Vuex.Store({
   state: {
-    goodsList: [] as GoodsDetail[]
+    goodsList: [] as GoodsDetail[],
+    amount: {scanAmount: 0, kindAmount: 0, totalAmount: 0}
   },
   mutations: {
     saveGood(state, payload) {
@@ -19,6 +20,13 @@ export default new Vuex.Store({
     getGoods(state) {
       const res = getLocalStorage('goodsList');
       state.goodsList = res ? copy(JSON.parse(res)) : copy([]);
+    },
+    saveAmount(state, payload) {
+      setLocalStorage('amount', JSON.stringify(payload.amount));
+    },
+    getAmount(state) {
+      const res = getLocalStorage('amount');
+      state.amount = res ? copy(JSON.parse(res)) : copy({scanAmount: 0, kindAmount: 0, totalAmount: 0});
     }
   },
   actions: {
