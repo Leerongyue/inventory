@@ -1,9 +1,11 @@
 <template>
   <div class="home">
     <Head text="盘点扫描中" :left="left" :right="right"/>
-    <Item text="工号" :code="account" placeholder="请输入工号" v-model="account"/>
     <Item text="条码" :code="barcode" placeholder="请输入条码" v-model="barcode"/>
-    <button class="btn" @click="inventory">确定</button>
+    <div class="itemWrapper">
+      <Item text="数量" :code="amount" placeholder="请输入数量" v-model="amount" class="downItem"/>
+      <button class="btn" @click="inventory">确定</button>
+    </div>
     <div class="detail">
       <div>条码 {{currentGood.barcode}}</div>
       <div>品名 {{currentGood.goodsname}}</div>
@@ -38,8 +40,8 @@
   export default class Home extends Vue {
     left = false;
     right = false;
-    account = '';
     barcode = '';
+    amount = '';
     currentGood = {} as GoodsDetail;
     goodsList = [] as GoodsDetail[];
 
@@ -50,7 +52,7 @@
     }
 
     inventory() {
-      const value = {'creater': this.account, 'barcode': this.barcode};
+      const value = {'creater': this.amount, 'barcode': this.barcode};
       this.$store.dispatch(
         'getResponse',
         {url: '/sssoa/infogoods/query', method: 'POST', value: JSON.stringify(value)})
@@ -70,12 +72,24 @@
     display: flex;
     flex-direction: column;
 
-    .btn {
-      background: rgb(22, 182, 234);
-      margin: 8px 16px;
-      padding: 6px 0;
-      color: white;
+    .itemWrapper {
+      display: flex;
+      align-items: center;
+
+      .downItem {
+        flex-grow: 1;
+      }
+
+      .btn {
+        background: rgb(22, 182, 234);
+        color: white;
+        width: 16vw;
+        padding: 6px 0;
+        margin-right: 16px;
+        margin-bottom: 10px;
+      }
     }
+
 
     .detail {
       margin: 0 16px;
