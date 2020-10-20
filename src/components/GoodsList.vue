@@ -1,22 +1,25 @@
 <template>
-  <table>
-    <thead>
-    <tr>
-      <th>条码</th>
-      <th>品名</th>
-      <th>规格</th>
-      <th>库存</th>
-    </tr>
-    </thead>
-    <tbody>
-    <tr v-for="(item,index) in goodsList" :key="index">
-      <td>{{item.barcode}}</td>
-      <td>{{item.goodsname}}</td>
-      <td>{{item.spec}}</td>
-      <td>{{item.stocknum}}</td>
-    </tr>
-    </tbody>
-  </table>
+  <div class="table">
+    <table>
+      <thead>
+      <tr>
+        <th>条码</th>
+        <th>品名</th>
+        <th>规格</th>
+        <th>库存</th>
+      </tr>
+      </thead>
+      <tbody>
+      <tr v-for="(item,index) in goodsList" :key="index">
+        <td>{{item.barcode}}</td>
+        <td>{{item.goodsname}}</td>
+        <td>{{item.spec}}</td>
+        <td>{{item.stocknum}}</td>
+      </tr>
+      </tbody>
+    </table>
+  </div>
+
 </template>
 
 <script lang="ts">
@@ -31,22 +34,49 @@
 </script>
 
 <style lang="scss" scoped>
+  @import "src/style/reset";
 
-  table {
+  .table {
     margin: 0 16px;
 
-    thead {
-      background: rgb(217, 217, 217);
-      line-height: 36px;
-      text-align: center;
-    }
+    table {
+      width: 100%;
 
-    tr {
-      td {
+      thead {
+        background: rgb(217, 217, 217);
+        line-height: 36px;
         text-align: center;
-        max-width: 30vw;
+
+      }
+
+      tbody {
+        tr {
+          border-bottom: 1px solid $lineColor;
+
+          td {
+            text-align: center;
+
+            &:nth-child(1) {
+              width: 35vw;
+            }
+
+            &:nth-child(2) {
+              width: 35vw;
+            }
+
+            &:nth-child(3) {
+              width: 15vw;
+            }
+
+            &:nth-child(4) {
+              width: 15vw;
+            }
+
+          }
+        }
       }
     }
   }
+
 
 </style>

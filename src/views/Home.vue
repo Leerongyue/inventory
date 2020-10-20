@@ -3,7 +3,8 @@
     <Head text="盘点扫描中" :left="left" :right="right"/>
     <Item text="条码" :code="barcode" placeholder="请输入条码" v-model="barcode"/>
     <div class="itemWrapper">
-      <Item text="数量" :code="amount" placeholder="请输入数量" v-model="amount" class="downItem"/>
+      <Item @keypress.enter.native="inventory" text="数量" :code="amount" placeholder="请输入数量" v-model="amount"
+            class="downItem"/>
       <button class="btn" @click="inventory">确定</button>
     </div>
     <div class="detail">
