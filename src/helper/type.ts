@@ -7,6 +7,8 @@ type GoodsDetail = {
   spec: string;
   stocknum: string;
   unitname: string;
+  createdAt: string;
+  amount: number;
 }
 type Goods = {
   infodata: GoodsDetail;

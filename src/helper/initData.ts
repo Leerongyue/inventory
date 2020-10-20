@@ -6,6 +6,8 @@ const HomeInitData = {
   retailprice: '',
   spec: '',
   stocknum: '',
-  unitname: ''
+  unitname: '',
+  amount: 0,
+  createdAt:''
 };
 export {HomeInitData};

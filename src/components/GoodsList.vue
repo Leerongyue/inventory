@@ -6,7 +6,7 @@
         <th>条码</th>
         <th>品名</th>
         <th>规格</th>
-        <th>库存</th>
+        <th>数量</th>
       </tr>
       </thead>
       <tbody>
@@ -14,7 +14,7 @@
         <td>{{item.barcode}}</td>
         <td>{{item.goodsname}}</td>
         <td>{{item.spec}}</td>
-        <td>{{item.stocknum}}</td>
+        <td>{{item.amount}}</td>
       </tr>
       </tbody>
     </table>
@@ -52,6 +52,7 @@
       tbody {
         tr {
           border-bottom: 1px solid $lineColor;
+          line-height: 32px;
 
           td {
             text-align: center;

@@ -40,6 +40,8 @@
   import {copy} from '@/helper/copy';
   import {HomeInitData} from '@/helper/initData';
   import {message} from 'ant-design-vue';
+  import dayjs from 'dayjs';
+  import {pushGood} from '@/helper/pushGood';
 
   @Component({
     components: {GoodsList, Head, Item}
@@ -63,7 +65,7 @@
       this.scanAmount = amountObj.scanAmount;
       this.kindAmount = amountObj.kindAmount;
       this.totalAmount = amountObj.totalAmount;
-      this.currentGood = goodsArr.length > 0 ? copy(goodsArr.pop()) : copy(HomeInitData);
+      this.currentGood = goodsArr.length > 0 ? copy(goodsArr.shift()) : copy(HomeInitData);
       this.goodsList = copy<GoodsDetail>(this.$store.state.goodsList);
     }
 
@@ -81,7 +83,6 @@
         'getResponse',
         {url: '/sssoa/infogoods/query', method: 'POST', value: JSON.stringify(value)})
         .then(res => {
-          console.log(res);
           if (res.data.err_msg === '无商品信息！') {
             message.info('无商品信息', 0.5);
             return;
@@ -90,13 +91,29 @@
           this.totalAmount = this.totalAmount + parseInt(this.amount);
           const data = res.data.resultObj.map((i: Goods) => i.infodata)[0] as GoodsDetail;
           this.currentGood = copy<GoodsDetail>(data);
-          this.goodsList.push(this.currentGood);
           const barcodeArr = copy(this.goodsList).map((i: GoodsDetail) => i.barcode);
-          if (this.goodsList.length === 1) {
+          if (this.goodsList.length === 0) {//无商品记录，品项数+1，商品列表+1
             this.kindAmount = 1;
+            pushGood(this.goodsList, this.currentGood, this.amount);
+            // this.goodsList.unshift({
+            //   ...this.currentGood,
+            //   amount: parseInt(this.amount),
+            //   createdAt: dayjs().format('YYYY-MM-DD HH:mm:ss.000')
+            // });
           } else {
-            if (!barcodeArr.includes(this.barcode)) {
+            if (barcodeArr.includes(this.barcode)) {//有商品记录，条码重复，品项数不变，商品列表不变
+              const existedGood = this.goodsList.filter((i: GoodsDetail) => i.barcode === this.currentGood.barcode)[0];
+              existedGood.amount += parseInt(this.amount);
+              existedGood.createdAt = dayjs().format('YYYY-MM-DD HH:mm:ss.000');
+              this.goodsList.sort((a, b) => dayjs(b.createdAt).valueOf() - dayjs(a.createdAt).valueOf());
+            } else {//有商品记录，条码不同，品项数+1，商品列表+1
               this.kindAmount += 1;
+              pushGood(this.goodsList, this.currentGood, this.amount);
+              // this.goodsList.unshift({
+              //   ...this.currentGood,
+              //   amount: parseInt(this.amount),
+              //   createdAt: dayjs().format('YYYY-MM-DD HH:mm:ss.000')
+              // });
             }
           }
           this.$store.commit('saveGood', {goodsList: this.goodsList});
