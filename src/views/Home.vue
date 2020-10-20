@@ -7,13 +7,18 @@
       <button class="btn" @click="inventory">确定</button>
     </div>
     <div class="detail">
-      <div>条码 {{currentGood.barcode}}</div>
-      <div>品名 {{currentGood.goodsname}}</div>
-      <div>拼音 {{currentGood.py}}</div>
-      <div>价格 {{currentGood.retailprice}}</div>
-      <div>规格 {{currentGood.spec}}</div>
-      <div>库存 {{currentGood.stocknum}}</div>
-      <div>单位 {{currentGood.unitname}}</div>
+      <div class="longDetail">
+        <div>条码 {{currentGood.barcode}}</div>
+        <div>品名 {{currentGood.goodsname}}</div>
+        <div>拼音 {{currentGood.py}}</div>
+        <div>时间 {{currentGood.createdate}}</div>
+      </div>
+      <div class="shortDetail">
+        <div>价格 {{currentGood.retailprice}}</div>
+        <div>规格 {{currentGood.spec}}</div>
+        <div>库存 {{currentGood.stocknum}}</div>
+        <div>单位 {{currentGood.unitname}}</div>
+      </div>
     </div>
     <div class="total">
       <span>扫描数 666</span>
@@ -52,11 +57,12 @@
     }
 
     inventory() {
-      const value = {'creater': this.amount, 'barcode': this.barcode};
+      const value = {'creater': '10', 'barcode': '6924187844582'};
       this.$store.dispatch(
         'getResponse',
         {url: '/sssoa/infogoods/query', method: 'POST', value: JSON.stringify(value)})
         .then(res => {
+          console.log(res);
           const data = res.data.resultObj.map((i: Goods) => i.infodata)[0] as GoodsDetail;
           this.currentGood = copy<GoodsDetail>(data);
           this.goodsList.push(this.currentGood);
@@ -90,10 +96,29 @@
       }
     }
 
-
     .detail {
-      margin: 0 16px;
+      display: flex;
+      align-items: center;
+      padding: 0 16px;
+      background: rgb(245, 245, 245);
+
+      .longDetail {
+        width: 70vw;
+
+        div {
+          padding: 4px 0;
+        }
+      }
+
+      .shortDetail {
+        width: 30vw;
+
+        div {
+          padding: 4px 0;
+        }
+      }
     }
+
 
     .total {
       background: rgb(245, 245, 245);
