@@ -3,9 +3,9 @@ const HomeInitData = {
   createdate: '',
   goodsname: '',
   py: '',
-  retailprice: 0,
+  retailprice: '',
   spec: '',
-  stocknum: 0,
+  stocknum: '',
   unitname: ''
 };
 export {HomeInitData};

@@ -21,9 +21,9 @@
       </div>
     </div>
     <div class="total">
-      <span>扫描数 666</span>
-      <span>品项数 666</span>
-      <span>总数量 666</span>
+      <span>扫描数 {{scanAmount}}</span>
+      <span>品项数 {{kindAmount}}</span>
+      <span>总数量 {{totalAmount}}</span>
     </div>
     <GoodsList :goods-list="goodsList"/>
   </div>
@@ -38,6 +38,7 @@
   import {Goods, GoodsDetail} from '@/helper/type';
   import {copy} from '@/helper/copy';
   import {HomeInitData} from '@/helper/initData';
+  import {message} from 'ant-design-vue';
 
   @Component({
     components: {GoodsList, Head, Item}
@@ -47,25 +48,53 @@
     right = false;
     barcode = '';
     amount = '';
+    scanAmount = 0;
+    kindAmount = 0;
+    totalAmount = 0;
     currentGood = {} as GoodsDetail;
     goodsList = [] as GoodsDetail[];
 
     created() {
       this.$store.commit('getGoods');
-      this.currentGood = copy<GoodsDetail>({...HomeInitData});
-      this.goodsList = copy(this.$store.state.goodsList);
+      const goodsArr = copy(this.$store.state.goodsList) as GoodsDetail[];
+      this.currentGood = goodsArr ? copy(goodsArr.pop()) : copy(HomeInitData);
+      // this.currentGood = copy<GoodsDetail>({...HomeInitData});
+      this.goodsList = copy<GoodsDetail>(this.$store.state.goodsList);
     }
 
     inventory() {
-      const value = {'creater': '10', 'barcode': '6924187844582'};
+      if (!this.barcode) {
+        message.info('请输入条码', 0.5);
+        return;
+      }
+      if (!this.amount) {
+        message.info('请输入数量', 0.5);
+        return;
+      }
+      const value = {creater: this.amount, barcode: this.barcode};
       this.$store.dispatch(
         'getResponse',
         {url: '/sssoa/infogoods/query', method: 'POST', value: JSON.stringify(value)})
         .then(res => {
           console.log(res);
+          if (res.data.err_msg === '无商品信息！') {
+            message.info('无商品信息', 0.5);
+            return;
+          }
+          this.scanAmount += 1;
+          this.totalAmount = this.totalAmount + parseInt(this.amount);
           const data = res.data.resultObj.map((i: Goods) => i.infodata)[0] as GoodsDetail;
           this.currentGood = copy<GoodsDetail>(data);
           this.goodsList.push(this.currentGood);
+          const barcodeArr = copy(this.goodsList).map((i: GoodsDetail) => i.barcode);
+          console.log(barcodeArr);
+          if (this.goodsList.length === 1) {
+            this.kindAmount = 1;
+          } else {
+            if (!barcodeArr.includes(this.barcode)) {
+              this.kindAmount += 1;
+            }
+          }
           this.$store.commit('saveGood', {goodsList: this.goodsList});
         });
     }
@@ -99,11 +128,12 @@
     .detail {
       display: flex;
       align-items: center;
-      padding: 0 16px;
+      margin: 0 16px;
       background: rgb(245, 245, 245);
 
       .longDetail {
         width: 70vw;
+        padding: 8px;
 
         div {
           padding: 4px 0;
@@ -123,7 +153,7 @@
     .total {
       background: rgb(245, 245, 245);
       margin: 8px 16px;
-      padding: 8px 0;
+      padding: 8px 0 8px 8px;
       font-size: 20px;
 
       span {

@@ -38,6 +38,7 @@
     thead {
       background: rgb(217, 217, 217);
       line-height: 36px;
+      text-align: center;
     }
 
     tr {

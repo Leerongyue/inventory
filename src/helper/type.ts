@@ -3,9 +3,9 @@ type GoodsDetail = {
   createdate: string;
   goodsname: string;
   py: string;
-  retailprice: number;
+  retailprice: string;
   spec: string;
-  stocknum: number;
+  stocknum: string;
   unitname: string;
 }
 type Goods = {
