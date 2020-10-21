@@ -9,7 +9,7 @@
     </div>
     <div class="detail">
       <div>条码 {{currentGood.barcode}}</div>
-      <div>品名 {{currentGood.goodsname}}</div>
+      <div class="goodsname">品名 {{currentGood.goodsname}}</div>
       <div class="stockandprice">
         <span class="price">价格 {{currentGood.retailprice}}</span>
         <span>库存 {{currentGood.stocknum}}</span>
@@ -62,14 +62,14 @@
       const goodsArr = copy(this.$store.state.goodsList) as GoodsDetail[];
       const amountArr = goodsArr.map((i: GoodsDetail) => i.amount);
       const amountObj = copy(this.$store.state.amount);
-      this.scanAmount = amountObj.scanAmount;
+      this.scanAmount = goodsArr.length === 0 ? 0 : amountObj.scanAmount;
       this.kindAmount = goodsArr.length;
-      this.totalAmount = amountArr.reduce((sum, item) => sum + item);
+      this.totalAmount = amountArr.length === 0 ? 0 : amountArr.reduce((sum, item) => sum + item);
       this.currentGood = goodsArr.length > 0 ? copy(goodsArr.shift()) : copy(HomeInitData);
       this.goodsList = copy<GoodsDetail>(this.$store.state.goodsList);
     }
 
-    inventory() {
+    async inventory() {
       if (!this.barcode) {
         message.info('请输入条码', 0.5);
         return;
@@ -79,42 +79,45 @@
         return;
       }
       const value = {creater: this.amount, barcode: this.barcode};
-      this.$store.dispatch(
+      const res = await this.$store.dispatch(
         'getResponse',
-        {url: '/sssoa/infogoods/query', method: 'POST', value: JSON.stringify(value)})
-        .then(res => {
-          if (res.data.err_msg === '无商品信息！') {
-            message.info('无商品信息', 0.5);
-            return;
-          }
-          this.scanAmount += 1;
-          this.totalAmount = this.totalAmount + parseInt(this.amount);
-          const data = res.data.resultObj.map((i: Goods) => i.infodata)[0] as GoodsDetail;
-          this.currentGood = copy<GoodsDetail>(data);
-          const barcodeArr = copy(this.goodsList).map((i: GoodsDetail) => i.barcode);
-          if (this.goodsList.length === 0) {//无商品记录，品项数+1，商品列表+1
-            this.kindAmount = 1;
-            pushGood(this.goodsList, this.currentGood, this.amount);
-          } else {
-            if (barcodeArr.includes(this.barcode)) {//有商品记录，条码重复，品项数不变，商品列表不变
-              const existedGood = this.goodsList.filter((i: GoodsDetail) => i.barcode === this.currentGood.barcode)[0];
-              existedGood.amount += parseInt(this.amount);
-              existedGood.createdAt = dayjs().format('YYYY-MM-DD HH:mm:ss.000');
-              this.goodsList.sort((a, b) => dayjs(b.createdAt).valueOf() - dayjs(a.createdAt).valueOf());
-            } else {//有商品记录，条码不同，品项数+1，商品列表+1
-              this.kindAmount += 1;
-              pushGood(this.goodsList, this.currentGood, this.amount);
-            }
-          }
-          this.$store.commit('saveGood', {goodsList: this.goodsList});
-          this.$store.commit('saveAmount', {
-            amount: {
-              scanAmount: this.scanAmount,
-              kindAmount: this.kindAmount,
-              totalAmount: this.totalAmount
-            }
-          });
-        });
+        {url: '/sssoa/infogoods/query', method: 'POST', value: JSON.stringify(value)});
+      await this.$store.dispatch(
+        'getResponse',
+        {url: '/sssoa/infogoods/query', method: 'POST', value: JSON.stringify(value)});
+      if (res.data.err_msg === '无商品信息！') {
+        message.info('无商品信息', 0.5);
+        return;
+      }
+      this.scanAmount += 1;
+      this.totalAmount = this.totalAmount + parseInt(this.amount);
+      const data = res.data.resultObj.map((i: Goods) => i.infodata)[0] as GoodsDetail;
+      this.currentGood = copy<GoodsDetail>(data);
+      const barcodeArr = copy(this.goodsList).map((i: GoodsDetail) => i.barcode);
+      if (this.goodsList.length === 0) {//无商品记录，品项数+1，商品列表+1
+        this.kindAmount = 1;
+        pushGood(this.goodsList, this.currentGood, this.amount);
+      } else {
+        if (barcodeArr.includes(this.barcode)) {//有商品记录，条码重复，品项数不变，商品列表不变
+          const existedGood = this.goodsList.filter((i: GoodsDetail) => i.barcode === this.currentGood.barcode)[0];
+          existedGood.amount += parseInt(this.amount);
+          existedGood.createdAt = dayjs().format('YYYY-MM-DD HH:mm:ss.000');
+          this.goodsList.sort((a, b) => dayjs(b.createdAt).valueOf() - dayjs(a.createdAt).valueOf());
+        } else {//有商品记录，条码不同，品项数+1，商品列表+1
+          this.kindAmount += 1;
+          pushGood(this.goodsList, this.currentGood, this.amount);
+        }
+      }
+      this.$store.commit('saveGood', {goodsList: this.goodsList});
+      this.$store.commit('saveAmount', {
+        amount: {
+          scanAmount: this.scanAmount,
+          kindAmount: this.kindAmount,
+          totalAmount: this.totalAmount
+        }
+      });
+      this.barcode = '';
+      this.amount = '';
     }
   }
 </script>
@@ -145,6 +148,10 @@
 
       div {
         margin: 8px;
+      }
+
+      .goodsname {
+        word-break: break-all;
       }
 
       .stockandprice {
