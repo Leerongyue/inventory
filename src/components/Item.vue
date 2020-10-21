@@ -4,7 +4,7 @@
     <input
       :placeholder="placeholder"
       type="text"
-      :value="code"
+      :value="value"
       @input="$emit('input',$event.target.value)">
   </div>
 </template>
@@ -16,8 +16,8 @@
   @Component
   export default class Item extends Vue {
     @Prop(String) text!: string;
-    @Prop(String) code!: string;
-    @Prop(String) placeholder!: string;
+    @Prop(String) value!: string;
+    @Prop(String) placeholder?: string;
   }
 </script>
 

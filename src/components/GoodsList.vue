@@ -10,7 +10,7 @@
       </tr>
       </thead>
       <tbody>
-      <tr v-for="(item,index) in goodsList" :key="index">
+      <tr v-for="(item,index) in goodsList" :key="index" @click="edit(item)">
         <td>{{item.barcode}}</td>
         <td>{{item.goodsname}}</td>
         <td>{{item.spec}}</td>
@@ -30,6 +30,11 @@
   @Component
   export default class GoodsList extends Vue {
     @Prop(Array) goodsList!: GoodsDetail[];
+
+    edit(item: GoodsDetail) {
+      const {barcode, goodsname, spec, amount} = item;
+      this.$router.push({path: 'edit', query: {barcode, goodsname, spec, amount: amount.toString()}});
+    }
   }
 </script>
 

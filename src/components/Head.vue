@@ -1,6 +1,6 @@
 <template>
   <div class="head">
-    <Icon name="left" :class="!left && 'leftHidden'"/>
+    <Icon name="left" :class="!left && 'leftHidden'" @click.native="goBack"/>
     <span><strong>{{text}}</strong></span>
     <Icon name="right" :class="!right && 'rightHidden'"/>
   </div>
@@ -18,6 +18,11 @@
     @Prop(String) text!: string;
     @Prop(Boolean) left!: boolean;
     @Prop(Boolean) right!: boolean;
+    @Prop(String) back!: string;
+
+    goBack() {
+      this.$router.push(this.back);
+    }
   }
 </script>
 

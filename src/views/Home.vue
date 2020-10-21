@@ -1,11 +1,11 @@
 <template>
   <div class="home">
-    <Head text="盘点扫描中" :left="left" :right="right"/>
-    <Item text="条码" :code="barcode" placeholder="请输入条码" v-model="barcode"/>
+    <Head back="" text="盘点扫描中" :left="left" :right="right"/>
+    <Item text="条码" :value="barcode" placeholder="请输入条码" v-model="barcode"/>
     <div class="itemWrapper">
-      <Item @keypress.enter.native="inventory" text="数量" :code="amount" placeholder="请输入数量" v-model="amount"
+      <Item @keypress.enter.native="inventory" text="数量" :value="amount" placeholder="请输入数量" v-model="amount"
             class="downItem"/>
-      <button class="btn" @click="inventory">确定</button>
+      <Button name="确定" @click.native="inventory"/>
     </div>
     <div class="detail">
       <div class="longDetail">
@@ -42,9 +42,10 @@
   import {message} from 'ant-design-vue';
   import dayjs from 'dayjs';
   import {pushGood} from '@/helper/pushGood';
+  import Button from '@/components/Button.vue';
 
   @Component({
-    components: {GoodsList, Head, Item}
+    components: {Button, GoodsList, Head, Item}
   })
   export default class Home extends Vue {
     left = false;
@@ -61,10 +62,14 @@
       this.$store.commit('getGoods');
       this.$store.commit('getAmount');
       const goodsArr = copy(this.$store.state.goodsList) as GoodsDetail[];
+      const amountArr = goodsArr.map((i: GoodsDetail) => i.amount);
       const amountObj = copy(this.$store.state.amount);
+      // this.kindAmount = amountObj.kindAmount;
+      // this.totalAmount = amountObj.totalAmount;
       this.scanAmount = amountObj.scanAmount;
-      this.kindAmount = amountObj.kindAmount;
-      this.totalAmount = amountObj.totalAmount;
+      this.kindAmount = goodsArr.length;
+      this.totalAmount = amountArr.reduce((sum, item) => sum + item);
+      console.log(this.totalAmount);
       this.currentGood = goodsArr.length > 0 ? copy(goodsArr.shift()) : copy(HomeInitData);
       this.goodsList = copy<GoodsDetail>(this.$store.state.goodsList);
     }
@@ -95,11 +100,6 @@
           if (this.goodsList.length === 0) {//无商品记录，品项数+1，商品列表+1
             this.kindAmount = 1;
             pushGood(this.goodsList, this.currentGood, this.amount);
-            // this.goodsList.unshift({
-            //   ...this.currentGood,
-            //   amount: parseInt(this.amount),
-            //   createdAt: dayjs().format('YYYY-MM-DD HH:mm:ss.000')
-            // });
           } else {
             if (barcodeArr.includes(this.barcode)) {//有商品记录，条码重复，品项数不变，商品列表不变
               const existedGood = this.goodsList.filter((i: GoodsDetail) => i.barcode === this.currentGood.barcode)[0];
@@ -109,11 +109,6 @@
             } else {//有商品记录，条码不同，品项数+1，商品列表+1
               this.kindAmount += 1;
               pushGood(this.goodsList, this.currentGood, this.amount);
-              // this.goodsList.unshift({
-              //   ...this.currentGood,
-              //   amount: parseInt(this.amount),
-              //   createdAt: dayjs().format('YYYY-MM-DD HH:mm:ss.000')
-              // });
             }
           }
           this.$store.commit('saveGood', {goodsList: this.goodsList});
@@ -141,15 +136,6 @@
 
       .downItem {
         flex-grow: 1;
-      }
-
-      .btn {
-        background: rgb(22, 182, 234);
-        color: white;
-        width: 16vw;
-        padding: 6px 0;
-        margin-right: 16px;
-        margin-bottom: 10px;
       }
     }
 
