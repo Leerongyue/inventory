@@ -29,6 +29,10 @@
     margin: 0 16px;
     padding: 10px 0;
 
+    span {
+      white-space: nowrap;
+    }
+
     input {
       border: none;
       border-bottom: 1px solid $lineColor;

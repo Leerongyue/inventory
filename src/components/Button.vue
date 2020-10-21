@@ -18,9 +18,8 @@
   .btn {
     background: rgb(22, 182, 234);
     color: white;
-    width: 16vw;
-    padding: 6px 0;
-    margin-right: 16px;
+    padding: 6px 12px;
     margin-bottom: 10px;
+    white-space: nowrap;
   }
 </style>

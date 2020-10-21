@@ -4,7 +4,6 @@
     <Item text="条码" :value="barcode" v-model="barcode" @input.native="onChange"/>
     <Item text="品名" :value="goodsname" v-model="goodsname" @input.native="onChange"/>
     <Item text="规格" :value="spec" v-model="spec" @input.native="onChange"/>
-    <Item text="数量" :value="amount" v-model="amount" @input.native="onChange"/>
     <Button @click.native="removeGood" name="删除商品"/>
   </div>
 </template>
@@ -27,14 +26,12 @@
     barcode = '';
     goodsname = '';
     spec = '';
-    amount = '';
 
     created() {
       this.$store.commit('getGoods');
       this.barcode = this.$route.query.barcode as string;
       this.goodsname = this.$route.query.goodsname as string;
       this.spec = this.$route.query.spec as string;
-      this.amount = this.$route.query.amount as string;
     }
 
     removeGood() {
@@ -51,7 +48,6 @@
       const current = goodsList.filter((i: GoodsDetail) => i.barcode === this.barcode)[0] as GoodsDetail;
       current.goodsname = this.goodsname;
       current.spec = this.spec;
-      current.amount = parseInt(this.amount);
       this.$store.commit('saveGood', {goodsList});
     }
   }

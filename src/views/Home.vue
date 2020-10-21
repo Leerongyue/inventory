@@ -132,9 +132,14 @@
     .itemWrapper {
       display: flex;
       align-items: center;
+      margin: 0 16px;
 
       .downItem {
         flex-grow: 1;
+      }
+
+      ::v-deep .item {
+        margin-left: 0;
       }
     }
 
