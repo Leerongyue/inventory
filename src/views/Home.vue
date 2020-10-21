@@ -8,17 +8,15 @@
       <Button name="确定" @click.native="inventory"/>
     </div>
     <div class="detail">
-      <div class="longDetail">
-        <div>条码 {{currentGood.barcode}}</div>
-        <div>品名 {{currentGood.goodsname}}</div>
-        <div>拼音 {{currentGood.py}}</div>
-        <div>时间 {{currentGood.createdate}}</div>
+      <div>条码 {{currentGood.barcode}}</div>
+      <div>品名 {{currentGood.goodsname}}</div>
+      <div class="stockandprice">
+        <span class="price">价格 {{currentGood.retailprice}}</span>
+        <span>库存 {{currentGood.stocknum}}</span>
       </div>
-      <div class="shortDetail">
-        <div>价格 {{currentGood.retailprice}}</div>
-        <div>规格 {{currentGood.spec}}</div>
-        <div>库存 {{currentGood.stocknum}}</div>
-        <div>单位 {{currentGood.unitname}}</div>
+      <div class="specandunit">
+        <span class="unit">单位 {{currentGood.unitname}}</span>
+        <span>规格 {{currentGood.spec}}</span>
       </div>
     </div>
     <div class="total">
@@ -64,8 +62,6 @@
       const goodsArr = copy(this.$store.state.goodsList) as GoodsDetail[];
       const amountArr = goodsArr.map((i: GoodsDetail) => i.amount);
       const amountObj = copy(this.$store.state.amount);
-      // this.kindAmount = amountObj.kindAmount;
-      // this.totalAmount = amountObj.totalAmount;
       this.scanAmount = amountObj.scanAmount;
       this.kindAmount = goodsArr.length;
       this.totalAmount = amountArr.reduce((sum, item) => sum + item);
@@ -144,25 +140,22 @@
     }
 
     .detail {
-      display: flex;
-      align-items: center;
       margin: 0 16px;
       background: rgb(245, 245, 245);
 
-      .longDetail {
-        width: 70vw;
-        padding: 8px;
+      div {
+        margin: 8px;
+      }
 
-        div {
-          padding: 4px 0;
+      .stockandprice {
+        .price {
+          margin-right: 8px;
         }
       }
 
-      .shortDetail {
-        width: 30vw;
-
-        div {
-          padding: 4px 0;
+      .specandunit {
+        .unit {
+          margin-right: 8px;
         }
       }
     }
