@@ -69,7 +69,6 @@
       this.scanAmount = amountObj.scanAmount;
       this.kindAmount = goodsArr.length;
       this.totalAmount = amountArr.reduce((sum, item) => sum + item);
-      console.log(this.totalAmount);
       this.currentGood = goodsArr.length > 0 ? copy(goodsArr.shift()) : copy(HomeInitData);
       this.goodsList = copy<GoodsDetail>(this.$store.state.goodsList);
     }
