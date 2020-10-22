@@ -41,6 +41,7 @@
   import dayjs from 'dayjs';
   import {pushGood} from '@/helper/pushGood';
   import Button from '@/components/Button.vue';
+  import AV from 'leancloud-storage';
 
   @Component({
     components: {Button, GoodsList, Head, Item}
@@ -69,6 +70,18 @@
       this.goodsList = copy<GoodsDetail>(this.$store.state.goodsList);
     }
 
+    // mounted() {
+    //   AV.init({
+    //     appId: 'jOxSvWBk0BRn4S3ANnFqm1KM-9Nh9j0Va',
+    //     appKey: 'f8HRI4khWoid9Y39SnAw2xME',
+    //     serverURL: 'https://joxsvwbk.lc-cn-e1-shared.com'
+    //   });
+    //   const query = new AV.Query('Data');
+    //   query.get('5f912f24613a66706cf95ac0').then((data: any) => {
+    //     console.log(JSON.parse(data._hashedJSON.data));
+    //   });
+    // }
+
     async inventory() {
       if (!this.barcode) {
         message.info('请输入条码', 0.5);
@@ -85,6 +98,8 @@
       await this.$store.dispatch(
         'getResponse',
         {url: '/sssoa/infogoods/query', method: 'POST', value: JSON.stringify(value)});
+      // console.log(JSON.stringify(res.data));
+      // console.log(JSON.stringify(res.data.resultObj[0].infodata));
       if (res.data.err_msg === '无商品信息！') {
         message.info('无商品信息', 0.5);
         return;
