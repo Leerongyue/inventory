@@ -2,7 +2,6 @@
   <div class="item">
     <span>{{text}}</span>
     <input
-      id="input"
       :placeholder="placeholder"
       type="text"
       :value="value"
@@ -20,19 +19,19 @@
     @Prop(String) value!: string;
     @Prop(String) placeholder?: string;
 
-    focus() {
-      const input = document.getElementById('input');
-      if (input) {
-        input.focus();
-      }
-    }
-
-    mounted() {
-      this.focus();
-      setTimeout(() => {
-        this.focus();
-      }, 0);
-    }
+    // focus() {
+    //   const input = document.getElementById('input');
+    //   if (input) {
+    //     input.focus();
+    //   }
+    // }
+    //
+    // mounted() {
+    //   this.focus();
+    //   setTimeout(() => {
+    //     this.focus();
+    //   }, 0);
+    // }
   }
 </script>
 

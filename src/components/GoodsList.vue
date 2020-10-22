@@ -52,30 +52,39 @@
         line-height: 36px;
         text-align: center;
 
+        tr {
+          white-space: nowrap;
+        }
       }
 
       tbody {
         tr {
           border-bottom: 1px solid $lineColor;
-          line-height: 32px;
+          line-height: 48px;
 
           td {
             text-align: center;
+            white-space: nowrap;
+            padding: 0 4px;
 
             &:nth-child(1) {
-              width: 35vw;
+              max-width: 33vw;
+              overflow-x: auto;
             }
 
             &:nth-child(2) {
-              width: 35vw;
+              max-width: 25vw;
+              overflow-x: auto;
             }
 
             &:nth-child(3) {
-              width: 15vw;
+              max-width: 24vw;
+              overflow-x: auto;
             }
 
             &:nth-child(4) {
-              width: 15vw;
+              max-width: 16vw;
+              overflow-x: auto;
             }
 
           }
