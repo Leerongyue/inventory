@@ -1,25 +1,22 @@
 <template>
-  <div class="table">
-    <table>
-      <thead>
-      <tr>
-        <th>条码</th>
-        <th>品名</th>
-        <th>规格</th>
-        <th>数量</th>
-      </tr>
-      </thead>
-      <tbody>
-      <tr v-for="(item,index) in goodsList" :key="index" @click="edit(item)">
-        <td>{{item.barcode}}</td>
-        <td>{{item.goodsname}}</td>
-        <td>{{item.spec}}</td>
-        <td>{{item.amount}}</td>
-      </tr>
-      </tbody>
-    </table>
-  </div>
-
+  <table>
+    <thead>
+    <tr>
+      <th>条码</th>
+      <th>品名</th>
+      <th>规格</th>
+      <th>数量</th>
+    </tr>
+    </thead>
+    <tbody>
+    <tr v-for="(item,index) in goodsList" :key="index" @click="edit(item)">
+      <td>{{item.barcode}}</td>
+      <td>{{item.goodsname}}</td>
+      <td>{{item.spec}}</td>
+      <td>{{item.amount}}</td>
+    </tr>
+    </tbody>
+  </table>
 </template>
 
 <script lang="ts">
@@ -41,53 +38,75 @@
 <style lang="scss" scoped>
   @import "src/style/reset";
 
-  .table {
+  table {
     margin: 0 16px;
 
-    table {
-      width: 100%;
+    thead {
+      background: rgb(217, 217, 217);
+      line-height: 36px;
+      text-align: center;
+      display: table;
+      table-layout: fixed;
 
-      thead {
-        background: rgb(217, 217, 217);
-        line-height: 36px;
-        text-align: center;
+      tr {
+        white-space: nowrap;
 
-        tr {
-          white-space: nowrap;
+        th {
+          &:nth-child(1) {
+            width: calc(33vw - 8px);
+          }
+
+          &:nth-child(2) {
+            width: calc(33vw - 8px);
+          }
+
+          &:nth-child(3) {
+            width: calc(17vw - 8px);
+          }
+
+          &:nth-child(4) {
+            width: calc(17vw - 8px);
+          }
         }
       }
+    }
 
-      tbody {
-        tr {
-          border-bottom: 1px solid $lineColor;
-          line-height: 48px;
+    tbody {
+      display: block;
+      height: 60vw;
+      overflow-y: auto;
 
-          td {
-            text-align: center;
-            white-space: nowrap;
-            padding: 0 4px;
+      tr {
+        border-bottom: 1px solid $lineColor;
+        line-height: 48px;
+        display: table;
+        width: 100%;
+        table-layout: fixed;
 
-            &:nth-child(1) {
-              max-width: 33vw;
-              overflow-x: auto;
-            }
+        td {
+          text-align: center;
+          white-space: nowrap;
 
-            &:nth-child(2) {
-              max-width: 25vw;
-              overflow-x: auto;
-            }
-
-            &:nth-child(3) {
-              max-width: 24vw;
-              overflow-x: auto;
-            }
-
-            &:nth-child(4) {
-              max-width: 16vw;
-              overflow-x: auto;
-            }
-
+          &:nth-child(1) {
+            width: calc(33vw - 8px);
+            overflow-x: auto;
           }
+
+          &:nth-child(2) {
+            width: calc(33vw - 8px);
+            overflow-x: auto;
+          }
+
+          &:nth-child(3) {
+            width: calc(17vw - 8px);
+            overflow-x: auto;
+          }
+
+          &:nth-child(4) {
+            width: calc(17vw - 8px);
+            overflow-x: auto;
+          }
+
         }
       }
     }
