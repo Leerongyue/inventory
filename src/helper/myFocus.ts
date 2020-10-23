@@ -1,3 +1,7 @@
+import Vue from 'vue';
+
 export const myFocus = (el: HTMLInputElement) => {
-  el.focus();
+  Vue.nextTick(() => {
+    el.focus();
+  });
 };

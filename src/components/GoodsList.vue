@@ -53,19 +53,19 @@
 
         th {
           &:nth-child(1) {
-            width: calc(33vw - 8px);
+            width: calc(35vw - 8px);
           }
 
           &:nth-child(2) {
-            width: calc(33vw - 8px);
+            width: calc(35vw - 8px);
           }
 
           &:nth-child(3) {
-            width: calc(17vw - 8px);
+            width: calc(15vw - 8px);
           }
 
           &:nth-child(4) {
-            width: calc(17vw - 8px);
+            width: calc(15vw - 8px);
           }
         }
       }
@@ -86,24 +86,25 @@
         td {
           text-align: center;
           white-space: nowrap;
+          padding: 0 4px;
 
           &:nth-child(1) {
-            width: calc(33vw - 8px);
+            width: calc(35vw - 8px);
             overflow-x: auto;
           }
 
           &:nth-child(2) {
-            width: calc(33vw - 8px);
+            width: calc(35vw - 8px);
             overflow-x: auto;
           }
 
           &:nth-child(3) {
-            width: calc(17vw - 8px);
+            width: calc(15vw - 8px);
             overflow-x: auto;
           }
 
           &:nth-child(4) {
-            width: calc(17vw - 8px);
+            width: calc(15vw - 8px);
             overflow-x: auto;
           }
 

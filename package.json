@@ -13,6 +13,7 @@
     "axios": "^0.20.0",
     "core-js": "^3.6.5",
     "dayjs": "^1.9.3",
+    "jquery": "^3.5.1",
     "leancloud-storage": "^4.7.0",
     "register-service-worker": "^1.7.1",
     "vue": "^2.6.11",
