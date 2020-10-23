@@ -4,6 +4,7 @@
     <Item text="条码" :value="barcode" v-model="barcode" @input.native="onChange"/>
     <Item text="品名" :value="goodsname" v-model="goodsname" @input.native="onChange"/>
     <Item text="规格" :value="spec" v-model="spec" @input.native="onChange"/>
+    <Item text="数量" :value="amount" v-model="amount" @input.native="onChange"/>
     <div class="twoButton">
       <Button @click.native="saveGood" name="保存商品"/>
       <Button @click.native="removeGood" name="删除商品"/>
@@ -30,12 +31,14 @@
     barcode = '';
     goodsname = '';
     spec = '';
+    amount = '';
 
     created() {
       this.$store.commit('getGoods');
       this.barcode = this.$route.query.barcode as string;
       this.goodsname = this.$route.query.goodsname as string;
       this.spec = this.$route.query.spec as string;
+      this.amount = this.$route.query.amount as string;
     }
 
     saveGood() {
