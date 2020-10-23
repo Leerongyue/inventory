@@ -4,8 +4,10 @@
     <Item text="条码" :value="barcode" v-model="barcode" @input.native="onChange"/>
     <Item text="品名" :value="goodsname" v-model="goodsname" @input.native="onChange"/>
     <Item text="规格" :value="spec" v-model="spec" @input.native="onChange"/>
-    <Button @click.native="saveGood" name="保存商品"/>
-    <Button @click.native="removeGood" name="删除商品"/>
+    <div class="twoButton">
+      <Button @click.native="saveGood" name="保存商品"/>
+      <Button @click.native="removeGood" name="删除商品"/>
+    </div>
   </div>
 </template>
 
@@ -67,7 +69,13 @@
 
     ::v-deep .btn {
       width: 25vw;
-      margin-top: 8px;
+      margin: 12px;
+
+    }
+
+    .twoButton {
+      display: flex;
+      justify-content: center
     }
   }
 </style>
