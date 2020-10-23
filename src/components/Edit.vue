@@ -61,6 +61,7 @@
       const current = goodsList.filter((i: GoodsDetail) => i.barcode === this.barcode)[0] as GoodsDetail;
       current.goodsname = this.goodsname;
       current.spec = this.spec;
+      current.amount = parseInt(this.amount);
       this.$store.commit('saveGood', {goodsList});
     }
   }

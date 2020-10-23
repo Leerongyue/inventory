@@ -1,10 +1,19 @@
 <template>
   <div class="home">
     <Head back="" text="盘点扫描中" :left="left" :right="right"/>
-    <Item text="条码" :value="barcode" placeholder="请输入条码" v-model="barcode"/>
-    <div class="itemWrapper">
-      <Item @keypress.enter.native="inventory" text="数量" :value="amount" placeholder="请输入数量" v-model="amount"
-            class="downItem"/>
+    <!--    <Item ref="input" text="条码" :value="barcode" placeholder="请输入条码" v-model="barcode"/>-->
+    <!--    <div class="itemWrapper">-->
+    <!--      <Item @keypress.enter.native="inventory" text="数量" :value="amount" placeholder="请输入数量" v-model="amount"-->
+    <!--            class="downItem"/>-->
+    <!--      <Button name="确定" @click.native="inventory"/>-->
+    <!--    </div>-->
+    <div class="barcodeItem">
+      <span>条码</span>
+      <input ref="barcodeInput" placeholder="请输入条码" type="text" v-model="barcode">
+    </div>
+    <div class="amountItem">
+      <span>数量</span>
+      <input ref="amountInput" placeholder="请输入数量" type="text" v-model="amount">
       <Button name="确定" @click.native="inventory"/>
     </div>
     <div class="detail">
@@ -42,6 +51,7 @@
   import {pushGood} from '@/helper/pushGood';
   import Button from '@/components/Button.vue';
   import AV from 'leancloud-storage';
+  import {myFocus} from '@/helper/myFocus';
 
   @Component({
     components: {Button, GoodsList, Head, Item}
@@ -56,6 +66,10 @@
     totalAmount = 0;
     currentGood = {} as GoodsDetail;
     goodsList = [] as GoodsDetail[];
+
+    mounted() {
+      myFocus(this.$refs.barcodeInput as HTMLInputElement);
+    }
 
     created() {
       this.$store.commit('getGoods');
@@ -85,10 +99,12 @@
     async inventory() {
       if (!this.barcode) {
         message.info('请输入条码', 0.5);
+        myFocus(this.$refs.barcodeInput as HTMLInputElement);
         return;
       }
       if (!this.amount) {
         message.info('请输入数量', 0.5);
+        myFocus(this.$refs.amountInput as HTMLInputElement);
         return;
       }
       const value = {creater: this.amount, barcode: this.barcode};
@@ -102,6 +118,9 @@
       // console.log(JSON.stringify(res.data.resultObj[0].infodata));
       if (res.data.err_msg === '无商品信息！') {
         message.info('无商品信息', 0.5);
+        myFocus(this.$refs.barcodeInput as HTMLInputElement);
+        this.barcode = '';
+        this.amount = '';
         return;
       }
       this.scanAmount += 1;
@@ -133,27 +152,46 @@
       });
       this.barcode = '';
       this.amount = '';
+      myFocus(this.$refs.barcodeInput as HTMLInputElement);
     }
   }
 </script>
 
 <style lang="scss" scoped>
+  @import "src/style/reset";
 
   .home {
     display: flex;
     flex-direction: column;
 
-    .itemWrapper {
+    /*.itemWrapper {*/
+    /*  display: flex;*/
+    /*  align-items: center;*/
+    /*  margin: 0 16px;*/
+
+    /*  .downItem {*/
+    /*    flex-grow: 1;*/
+    /*  }*/
+
+    /*  ::v-deep .item {*/
+    /*    margin-left: 0;*/
+    /*  }*/
+    /*}*/
+    .barcodeItem, .amountItem {
       display: flex;
       align-items: center;
       margin: 0 16px;
+      padding: 10px 0;
 
-      .downItem {
-        flex-grow: 1;
+      span {
+        white-space: nowrap;
       }
 
-      ::v-deep .item {
-        margin-left: 0;
+      input {
+        border: none;
+        border-bottom: 1px solid $lineColor;
+        flex-grow: 1;
+        margin-left: 16px;
       }
     }
 
