@@ -23,12 +23,12 @@
           </span>
           </div>
           <div>
-            单位 {{currentGood.unitname}}
+            规格 {{currentGood.spec}}
           </div>
         </div>
         <ul>
           <li>价格 {{currentGood.retailprice}}</li>
-          <li>规格 {{currentGood.spec}}</li>
+          <li>单位 {{currentGood.unitname}}</li>
           <li>库存 {{currentGood.stocknum}}</li>
         </ul>
       </div>

@@ -1,22 +1,29 @@
 <template>
   <div id="app">
-    <router-view/>
+    <router-view v-if="isAlive"/>
   </div>
 </template>
 <script lang="ts">
-  import Vue from 'vue';
-  import {Component} from 'vue-property-decorator';
+  import Vue from "vue";
+  import {Component, Provide} from "vue-property-decorator";
 
   @Component
   export default class App extends Vue {
+    @Provide() refresh = this.reload;
+    isAlive = true;
 
+    reload() {
+      this.isAlive = false;
+      this.$nextTick(() => {
+        this.isAlive = true;
+      });
+    }
   }
 </script>
 
 <style lang="scss">
   @import "src/style/reset";
   @import "src/style/helper";
-
 
   #app {
     -webkit-font-smoothing: antialiased;
