@@ -1,0 +1,118 @@
+@import "src/style/reset";
+
+.home {
+  display: flex;
+  flex-direction: column;
+  height: 100vh;
+
+  .stickyArea {
+
+    .barcodeItem, .amountItem {
+      display: flex;
+      align-items: center;
+      margin: 0 16px;
+      padding: 4px 0;
+
+      span {
+        white-space: nowrap;
+      }
+
+      input {
+        border: none;
+        border-bottom: 1px solid $lineColor;
+        flex-grow: 1;
+        margin-left: 16px;
+      }
+    }
+
+    .detail {
+      display: flex;
+      margin: 0 16px;
+      background: rgb(245, 245, 245);
+
+      ul {
+        li {
+          padding: 4px 0 0 4px;
+        }
+      }
+
+      .left {
+        min-width: 50vw;
+        max-width: 60vw;
+        white-space: nowrap;
+        margin-right: 4px;
+
+        div {
+          padding: 4px 0 0 4px;
+          width: 100%;
+        }
+
+        .goodsname {
+          display: flex;
+          white-space: nowrap;
+
+          .rightSpan {
+            flex-grow: 1;
+            overflow-x: auto;
+            margin-left: 4px;
+          }
+        }
+      }
+    }
+
+    .total {
+      background: rgb(245, 245, 245);
+      margin: 8px 16px;
+      padding: 8px 0 8px 4px;
+      font-size: 20px;
+      white-space: nowrap;
+
+      span {
+        margin-right: 12px;
+      }
+    }
+
+    @media (max-width: 320px) {
+      .total {
+        font-size: 16px;
+      }
+    }
+
+    .thead {
+      background: rgb(217, 217, 217);
+      padding: 8px 0;
+      margin: 0 16px;
+
+      span {
+        display: inline-block;
+
+
+        &:nth-child(1) {
+          text-align: center;
+          width: 35%;
+        }
+
+        &:nth-child(2) {
+          text-align: center;
+          width: 35%;
+        }
+
+        &:nth-child(3) {
+          text-align: center;
+          width: 15%;
+        }
+
+        &:nth-child(4) {
+          text-align: center;
+          width: 15%;
+        }
+      }
+    }
+  }
+
+  .goodslist {
+    flex-grow: 1;
+    overflow: auto;
+    -webkit-overflow-scrolling: touch;
+  }
+}

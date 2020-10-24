@@ -1,57 +1,70 @@
 <template>
   <div class="home">
-    <Head back="" text="盘点扫描中" :left="left" :right="right"/>
-    <!--    <Item ref="input" text="条码" :value="barcode" placeholder="请输入条码" v-model="barcode"/>-->
-    <!--    <div class="itemWrapper">-->
-    <!--      <Item @keypress.enter.native="inventory" text="数量" :value="amount" placeholder="请输入数量" v-model="amount"-->
-    <!--            class="downItem"/>-->
-    <!--      <Button name="确定" @click.native="inventory"/>-->
-    <!--    </div>-->
-    <div class="barcodeItem">
-      <span>条码</span>
-      <input ref="barcodeInput" placeholder="请输入条码" type="text" v-model="barcode">
-    </div>
-    <div class="amountItem">
-      <span>数量</span>
-      <input ref="amountInput" placeholder="请输入数量" type="text" v-model="amount">
-      <Button name="确定" @click.native="inventory"/>
-    </div>
-    <div class="detail">
-      <div>条码 {{currentGood.barcode}}</div>
-      <div class="goodsname">品名 {{currentGood.goodsname}}</div>
-      <div class="stockandprice">
-        <span class="price">价格 {{currentGood.retailprice}}</span>
-        <span>库存 {{currentGood.stocknum}}</span>
+    <div class="stickyArea">
+      <Head back="" text="盘点扫描中" :left="left" :right="right"/>
+      <div class="barcodeItem">
+        <span>条码</span>
+        <input ref="barcodeInput" placeholder="请输入条码" type="text" v-model="barcode">
       </div>
-      <div class="specandunit">
-        <span class="unit">单位 {{currentGood.unitname}}</span>
-        <span>规格 {{currentGood.spec}}</span>
+      <div class="amountItem">
+        <span>数量</span>
+        <input ref="amountInput" placeholder="请输入数量" type="text" v-model="amount">
+        <Button name="确定" @click.native="inventory"/>
+      </div>
+      <div class="detail">
+        <div class="left">
+          <div>
+            条码 {{currentGood.barcode}}
+          </div>
+          <div class="goodsname">
+            <span>品名</span>
+            <span class="rightSpan">
+            {{currentGood.goodsname}}
+          </span>
+          </div>
+          <div>
+            单位 {{currentGood.unitname}}
+          </div>
+        </div>
+        <ul>
+          <li>价格 {{currentGood.retailprice}}</li>
+          <li>规格 {{currentGood.spec}}</li>
+          <li>库存 {{currentGood.stocknum}}</li>
+        </ul>
+      </div>
+      <div class="total">
+        <span>扫描数 {{scanAmount}}</span>
+        <span>品项数 {{kindAmount}}</span>
+        <span>总数量 {{totalAmount}}</span>
+      </div>
+      <div class="thead">
+        <span><strong>条码</strong></span>
+        <span><strong>品名</strong></span>
+        <span><strong>规格</strong></span>
+        <span><strong>数量</strong></span>
       </div>
     </div>
-    <div class="total">
-      <span>扫描数 {{scanAmount}}</span>
-      <span>品项数 {{kindAmount}}</span>
-      <span>总数量 {{totalAmount}}</span>
+    <div class="goodslist">
+      <GoodsList :goods-list="goodsList"/>
     </div>
-    <GoodsList :goods-list="goodsList"/>
   </div>
 </template>
 
 <script lang="ts">
-  import Vue from 'vue';
-  import {Component} from 'vue-property-decorator';
-  import Item from '@/components/Item.vue';
-  import Head from '@/components/Head.vue';
-  import GoodsList from '@/components/GoodsList.vue';
-  import {Goods, GoodsDetail} from '@/helper/type';
-  import {copy} from '@/helper/copy';
-  import {HomeInitData} from '@/helper/initData';
-  import {message} from 'ant-design-vue';
-  import dayjs from 'dayjs';
-  import {pushGood} from '@/helper/pushGood';
-  import Button from '@/components/Button.vue';
-  import AV from 'leancloud-storage';
-  import {myFocus} from '@/helper/myFocus';
+  import Vue from "vue";
+  import {Component} from "vue-property-decorator";
+  import Item from "@/components/Item.vue";
+  import Head from "@/components/Head.vue";
+  import GoodsList from "@/components/GoodsList.vue";
+  import {Goods, GoodsDetail} from "@/helper/type";
+  import {copy} from "@/helper/copy";
+  import {HomeInitData} from "@/helper/initData";
+  import {message} from "ant-design-vue";
+  import dayjs from "dayjs";
+  import {pushGood} from "@/helper/pushGood";
+  import Button from "@/components/Button.vue";
+  import AV from "leancloud-storage";
+  import {myFocus} from "@/helper/myFocus";
 
   @Component({
     components: {Button, GoodsList, Head, Item}
@@ -59,8 +72,8 @@
   export default class Home extends Vue {
     left = false;
     right = false;
-    barcode = '';
-    amount = '';
+    barcode = "";
+    amount = "";
     scanAmount = 0;
     kindAmount = 0;
     totalAmount = 0;
@@ -72,8 +85,13 @@
     }
 
     created() {
-      this.$store.commit('getGoods');
-      this.$store.commit('getAmount');
+      const div = document.querySelector(".stickyArea");
+      if (div) {
+        console.log(div.getBoundingClientRect());
+      }
+
+      this.$store.commit("getGoods");
+      this.$store.commit("getAmount");
       const goodsArr = copy(this.$store.state.goodsList) as GoodsDetail[];
       const amountArr = goodsArr.map((i: GoodsDetail) => i.amount);
       const amountObj = copy(this.$store.state.amount);
@@ -84,43 +102,31 @@
       this.goodsList = copy<GoodsDetail>(this.$store.state.goodsList);
     }
 
-    // mounted() {
-    //   AV.init({
-    //     appId: 'jOxSvWBk0BRn4S3ANnFqm1KM-9Nh9j0Va',
-    //     appKey: 'f8HRI4khWoid9Y39SnAw2xME',
-    //     serverURL: 'https://joxsvwbk.lc-cn-e1-shared.com'
-    //   });
-    //   const query = new AV.Query('Data');
-    //   query.get('5f912f24613a66706cf95ac0').then((data: any) => {
-    //     console.log(JSON.parse(data._hashedJSON.data));
-    //   });
-    // }
-
     async inventory() {
       if (!this.barcode) {
-        message.info('请输入条码', 0.5);
+        message.info("请输入条码", 0.5);
         myFocus(this.$refs.barcodeInput as HTMLInputElement);
         return;
       }
       if (!this.amount) {
-        message.info('请输入数量', 0.5);
+        message.info("请输入数量", 0.5);
         myFocus(this.$refs.amountInput as HTMLInputElement);
         return;
       }
       const value = {creater: this.amount, barcode: this.barcode};
       const res = await this.$store.dispatch(
-        'getResponse',
-        {url: '/sssoa/infogoods/query', method: 'POST', value: JSON.stringify(value)});
+        "getResponse",
+        {url: "/sssoa/infogoods/query", method: "POST", value: JSON.stringify(value)});
       await this.$store.dispatch(
-        'getResponse',
-        {url: '/sssoa/infogoods/query', method: 'POST', value: JSON.stringify(value)});
+        "getResponse",
+        {url: "/sssoa/infogoods/query", method: "POST", value: JSON.stringify(value)});
       // console.log(JSON.stringify(res.data));
       // console.log(JSON.stringify(res.data.resultObj[0].infodata));
-      if (res.data.err_msg === '无商品信息！') {
-        message.info('无商品信息', 0.5);
+      if (res.data.err_msg === "无商品信息！") {
+        message.info("无商品信息", 0.5);
         myFocus(this.$refs.barcodeInput as HTMLInputElement);
-        this.barcode = '';
-        this.amount = '';
+        this.barcode = "";
+        this.amount = "";
         return;
       }
       this.scanAmount += 1;
@@ -135,101 +141,28 @@
         if (barcodeArr.includes(this.barcode)) {//有商品记录，条码重复，品项数不变，商品列表不变
           const existedGood = this.goodsList.filter((i: GoodsDetail) => i.barcode === this.currentGood.barcode)[0];
           existedGood.amount += parseInt(this.amount);
-          existedGood.createdAt = dayjs().format('YYYY-MM-DD HH:mm:ss.000');
+          existedGood.createdAt = dayjs().format("YYYY-MM-DD HH:mm:ss.000");
           this.goodsList.sort((a, b) => dayjs(b.createdAt).valueOf() - dayjs(a.createdAt).valueOf());
         } else {//有商品记录，条码不同，品项数+1，商品列表+1
           this.kindAmount += 1;
           pushGood(this.goodsList, this.currentGood, this.amount);
         }
       }
-      this.$store.commit('saveGood', {goodsList: this.goodsList});
-      this.$store.commit('saveAmount', {
+      this.$store.commit("saveGood", {goodsList: this.goodsList});
+      this.$store.commit("saveAmount", {
         amount: {
           scanAmount: this.scanAmount,
           kindAmount: this.kindAmount,
           totalAmount: this.totalAmount
         }
       });
-      this.barcode = '';
-      this.amount = '';
+      this.barcode = "";
+      this.amount = "";
       myFocus(this.$refs.barcodeInput as HTMLInputElement);
     }
   }
 </script>
 
 <style lang="scss" scoped>
-  @import "src/style/reset";
-
-  .home {
-    display: flex;
-    flex-direction: column;
-
-    /*.itemWrapper {*/
-    /*  display: flex;*/
-    /*  align-items: center;*/
-    /*  margin: 0 16px;*/
-
-    /*  .downItem {*/
-    /*    flex-grow: 1;*/
-    /*  }*/
-
-    /*  ::v-deep .item {*/
-    /*    margin-left: 0;*/
-    /*  }*/
-    /*}*/
-    .barcodeItem, .amountItem {
-      display: flex;
-      align-items: center;
-      margin: 0 16px;
-      padding: 10px 0;
-
-      span {
-        white-space: nowrap;
-      }
-
-      input {
-        border: none;
-        border-bottom: 1px solid $lineColor;
-        flex-grow: 1;
-        margin-left: 16px;
-      }
-    }
-
-    .detail {
-      margin: 0 16px;
-      background: rgb(245, 245, 245);
-
-      div {
-        margin: 8px;
-      }
-
-      .goodsname {
-        word-break: break-all;
-      }
-
-      .stockandprice {
-        .price {
-          margin-right: 8px;
-        }
-      }
-
-      .specandunit {
-        .unit {
-          margin-right: 8px;
-        }
-      }
-    }
-
-
-    .total {
-      background: rgb(245, 245, 245);
-      margin: 8px 16px;
-      padding: 8px 0 8px 8px;
-      font-size: 20px;
-
-      span {
-        margin-right: 12px;
-      }
-    }
-  }
+  @import "src/style/home";
 </style>

@@ -7,9 +7,9 @@
 </template>
 
 <script lang="ts">
-  import Vue from 'vue';
-  import {Component, Prop} from 'vue-property-decorator';
-  import Icon from '@/components/Icon.vue';
+  import Vue from "vue";
+  import {Component, Prop} from "vue-property-decorator";
+  import Icon from "@/components/Icon.vue";
 
   @Component({
     components: {Icon}
@@ -34,9 +34,6 @@
     background: rgb(22, 182, 234);
     padding: 12px 16px;
     margin-bottom: 14px;
-    position: sticky;
-    top: 0;
-    left: 0;
 
     span {
       font-size: 24px;
