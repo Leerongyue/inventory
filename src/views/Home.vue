@@ -63,7 +63,6 @@
   import dayjs from "dayjs";
   import {pushGood} from "@/helper/pushGood";
   import Button from "@/components/Button.vue";
-  import AV from "leancloud-storage";
   import {myFocus} from "@/helper/myFocus";
 
   @Component({
@@ -85,11 +84,6 @@
     }
 
     created() {
-      const div = document.querySelector(".stickyArea");
-      if (div) {
-        console.log(div.getBoundingClientRect());
-      }
-
       this.$store.commit("getGoods");
       this.$store.commit("getAmount");
       const goodsArr = copy(this.$store.state.goodsList) as GoodsDetail[];
@@ -113,11 +107,13 @@
         myFocus(this.$refs.amountInput as HTMLInputElement);
         return;
       }
+      if (!/^(\d?)+(\.\d{0,2})?$/.test(this.amount)) {
+        message.info("数量错误", 0.5);
+        myFocus(this.$refs.amountInput as HTMLInputElement);
+        return;
+      }
       const value = {creater: this.amount, barcode: this.barcode};
       const res = await this.$store.dispatch(
-        "getResponse",
-        {url: "/sssoa/infogoods/query", method: "POST", value: JSON.stringify(value)});
-      await this.$store.dispatch(
         "getResponse",
         {url: "/sssoa/infogoods/query", method: "POST", value: JSON.stringify(value)});
       // console.log(JSON.stringify(res.data));
